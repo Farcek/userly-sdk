@@ -3,7 +3,7 @@ export interface ILoginOption {
     baseUrl: string;
 }
 export interface ILoginParams {
-    userIdentity: string;
+    useridentity: string;
     password: string;
 }
 export interface ILoginResult {

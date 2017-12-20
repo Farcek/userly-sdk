@@ -5,7 +5,7 @@ export interface ILoginOption {
 }
 
 export interface ILoginParams {
-    userIdentity: string
+    useridentity: string
     password: string
 }
 
