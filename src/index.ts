@@ -36,23 +36,25 @@ export class UserlySdk {
     private token: ClientToken;
 
     constructor(private option: IOption) {
-
         this.token = new ClientToken(option);
-
     }
 
     login(param: ILogin.ILoginParams) {
         return ILogin.login({
             baseUrl: this.option.baseUrl,
-            token: this.token.currentToken
+            token: this.currentToken
         }, param);
     }
 
     register(params: IRegister.IRegisterParams) {
         return IRegister.register({
             baseUrl: this.option.baseUrl,
-            token: this.token.currentToken
+            token: this.currentToken
         }, params)
+    }
+
+    get currentToken() {
+        return this.token.currentToken;
     }
 
     // async profile(usertoken: string) {

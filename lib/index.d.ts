@@ -10,4 +10,5 @@ export declare class UserlySdk {
     constructor(option: IOption);
     login(param: ILogin.ILoginParams): Promise<ILogin.ILoginResult>;
     register(params: IRegister.IRegisterParams): Promise<IRegister.IRegisterResult>;
+    readonly currentToken: string;
 }
