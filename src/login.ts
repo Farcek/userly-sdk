@@ -10,7 +10,10 @@ export interface ILoginParams {
 }
 
 export interface ILoginResult {
-    userid: string, name: string, confirmed: boolean
+    userid: string
+    name: string
+    confirmed: boolean
+    roles: string[]
 }
 
 
@@ -20,4 +23,11 @@ export function login(option: ILoginOption, params: ILoginParams) {
     };
 
     return http.post<ILoginResult>(`${option.baseUrl}/login`, header, params);
+}
+export function loginByTokencode(option: ILoginOption, tokencode: string) {
+    let header = {
+        Authorization: 'Bearer ' + option.token
+    };
+
+    return http.post<ILoginResult>(`${option.baseUrl}/login-tokencode`, header, { tokencode });
 }

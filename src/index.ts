@@ -1,8 +1,7 @@
-
-
 import { ClientToken, IOption as ITokenOptions } from './token';
 import * as ILogin from './login';
 import * as IRegister from './register';
+import * as IAcl from './acl';
 
 
 // export interface IProfileResult {
@@ -34,9 +33,12 @@ export interface IOption extends ITokenOptions {
 }
 export class UserlySdk {
     private token: ClientToken;
+    private aclManager: IAcl.AclManager;
 
     constructor(private option: IOption) {
         this.token = new ClientToken(option);
+
+        this.aclManager = new IAcl.AclManager(option.baseUrl, this.token);
     }
 
     login(param: ILogin.ILoginParams) {
@@ -44,6 +46,13 @@ export class UserlySdk {
             baseUrl: this.option.baseUrl,
             token: this.currentToken
         }, param);
+    }
+
+    loginByTokencode(tokencode: string) {
+        return ILogin.loginByTokencode({
+            baseUrl: this.option.baseUrl,
+            token: this.currentToken
+        }, tokencode);
     }
 
     register(params: IRegister.IRegisterParams) {
@@ -55,6 +64,23 @@ export class UserlySdk {
 
     get currentToken() {
         return this.token.currentToken;
+    }
+
+    getACL() {
+        return IAcl.getACL({
+            baseUrl: this.option.baseUrl,
+            token: this.currentToken
+        })
+    }
+    setACL(table: IAcl.IAccessTable) {
+        return IAcl.setACL({
+            baseUrl: this.option.baseUrl,
+            token: this.currentToken
+        }, table)
+    }
+
+    checkACL(roles: string[], resource: string) {
+        return this.aclManager.guard(roles, resource);
     }
 
     // async profile(usertoken: string) {
