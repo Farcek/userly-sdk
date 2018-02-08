@@ -50,9 +50,9 @@ export class AclManager {
             return this._table;
         }
 
-        let result = await getACL({ baseUrl: this.baseUrl, token: this.token.currentToken });
+        this._table = await getACL({ baseUrl: this.baseUrl, token: this.token.currentToken });
 
-        return result;
+        return this._table;
     }
 
     private test(table: IAccessTable, role: string, resource: string) {
