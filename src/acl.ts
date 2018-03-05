@@ -1,5 +1,9 @@
 import * as http from './http';
 import * as token from './token';
+
+const debug = require('debug')('userly-sdk');
+
+
 export interface ILoginOption {
     token: string
     baseUrl: string
@@ -19,6 +23,8 @@ export interface IACLResult {
 }
 
 export async function getACL(option: ILoginOption) {
+
+    debug('call getACL')
     let header = {
         Authorization: 'Bearer ' + option.token
     };
@@ -36,23 +42,21 @@ export function setACL(option: ILoginOption, accessTable: IAccessTable) {
 }
 
 export class AclManager {
-
-
-
+    
     constructor(private baseUrl: string, private token: token.ClientToken) {
-
+        debug('create instance AclManager')
     }
 
 
-    private _table?: IAccessTable;
+    private _table: IAccessTable | null = null;
     private async getTable(): Promise<IAccessTable> {
         if (this._table) {
+            debug('AclManager.getTable from cache')
             return this._table;
         }
-
-        this._table = await getACL({ baseUrl: this.baseUrl, token: this.token.currentToken });
-
-        return this._table;
+        let at = this._table = await getACL({ baseUrl: this.baseUrl, token: this.token.currentToken });
+        debug('AclManager.getTable from loading')
+        return at;
     }
 
     private test(table: IAccessTable, role: string, resource: string) {
@@ -83,8 +87,7 @@ export class AclManager {
 
         if (Array.isArray(roles)) {
             let table = await this.getTable()
-            for (let par of roles) {
-                console.log('par', par)
+            for (let par of roles) {                
                 if (this.test(table, par, resource)) {
                     return true;
                 }

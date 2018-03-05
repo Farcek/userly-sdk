@@ -19,7 +19,7 @@ export class ClientToken {
     constructor(private option: IOption) { }
 
 
-    private _token: string
+    private _token?: string
     get currentToken() {
         if (this._token) {
             return this._token;
@@ -29,13 +29,13 @@ export class ClientToken {
         let payload = {
             a: this.option.appid
         }
-        this._token = jwt.sign(payload, key, { jwtid: 'client', expiresIn: this.option.expiresIn, algorithm: 'RS256' });
+        let token:string = this._token = jwt.sign(payload, key, { jwtid: 'client', expiresIn: this.option.expiresIn, algorithm: 'RS256' });
 
         setTimeout(() => {
             delete this._token;
         }, ms(this.option.timeout || '1m'));
 
-        return this._token;
+        return token;
     }
 }
 

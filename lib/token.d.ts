@@ -7,6 +7,6 @@ export interface IOption {
 export declare class ClientToken {
     private option;
     constructor(option: IOption);
-    private _token;
+    private _token?;
     readonly currentToken: string;
 }

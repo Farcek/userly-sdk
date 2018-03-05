@@ -21,7 +21,7 @@ export declare class AclManager {
     private baseUrl;
     private token;
     constructor(baseUrl: string, token: token.ClientToken);
-    private _table?;
+    private _table;
     private getTable();
     private test(table, role, resource);
     guard(roles: string[], resource: string): Promise<boolean>;

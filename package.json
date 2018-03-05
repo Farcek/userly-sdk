@@ -4,14 +4,18 @@
     "description": "userly service nodejs sdk",
     "main": "lib/index.js",
     "types": "./lib/index.d.ts",
-    "scripts": {},
+    "scripts": {
+        "tsc": "tsc"
+    },
     "author": "farcek <farcek@gmail.com>",
     "license": "ISC",
     "dependencies": {
+        "debug": "^3.1.0",
         "jsonwebtoken": "^8.1.0",
         "request": "^2.83.0"
     },
     "devDependencies": {
-        "@types/node": "^8.5.1"
+        "@types/node": "^8.5.1",
+        "typescript": "^2.7.2"
     }
 }
