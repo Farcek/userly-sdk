@@ -1,5 +1,6 @@
 import * as http from './http';
 import * as token from './token';
+const debug = require('debug')('userly-sdk:aclmanager');
 export interface ILoginOption {
     token: string
     baseUrl: string
@@ -41,13 +42,14 @@ export class AclManager {
     private tableAt?: Date;
 
     constructor(private baseUrl: string, private token: token.ClientToken, private requestTimeout: number) {
-
+        debug("create AclManager");
     }
 
 
     private _table?: IAccessTable;
     private async getTable(): Promise<IAccessTable> {
         if (this._table) {
+            debug("use acl table from cache");
             return this._table;
         }
 
@@ -55,9 +57,9 @@ export class AclManager {
     }
 
     async reloadTable() {
-
         this.tableAt = new Date();
         this._table = await getACL({ baseUrl: this.baseUrl, requestTimeout: this.requestTimeout, token: this.token.currentToken });
+        debug("reload acl table");
         return this._table;
     }
 
@@ -79,10 +81,8 @@ export class AclManager {
                     }
                 }
             }
-
         }
         return false;
-
     }
 
     async guard(roles: string[], resource: string): Promise<boolean> {
@@ -94,7 +94,15 @@ export class AclManager {
                     return true;
                 }
             }
+            if (debug.enabled) {
+                debug(`ACL : ${JSON.stringify(table)} `);
+            }
         }
+        if (debug.enabled) {
+            debug(`not access. roles: ${(roles || []).join(', ')};  find resource: ${resource}; `);
+
+        }
+
         return false
     }
 }

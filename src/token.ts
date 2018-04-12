@@ -1,4 +1,4 @@
-
+const debug = require('debug')('userly-sdk:token');
 const jwt = require('jsonwebtoken');
 const ms = require('ms');
 
@@ -37,6 +37,7 @@ export class ClientToken {
     private _token: string = '';
     get currentToken() {
         if (this._token) {
+            debug('token use from cache')
             return this._token;
         }
 
@@ -45,9 +46,11 @@ export class ClientToken {
             a: this.option.appid
         }
         this._token = jwt.sign(payload, key, { jwtid: 'client', expiresIn: this.option.expiresIn, algorithm: 'RS256' });
+        debug('token use generated')
 
         setTimeout(() => {
             delete this._token;
+            debug('used cache clear')
         }, ms(this.option.tokenCacheTimeout || '1m'));
 
         return this._token;
