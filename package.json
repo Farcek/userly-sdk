@@ -1,21 +1,21 @@
 {
-  "name": "userly-sdk",
-  "version": "2.0.1",
-  "description": "userly service nodejs sdk",
-  "main": "lib/index.js",
-  "types": "./lib/index.d.ts",
-  "scripts": {
-    "tsc": "tsc"
-  },
-  "author": "farcek <farcek@gmail.com>",
-  "license": "ISC",
-  "dependencies": {
-    "debug": "^3.1.0",
-    "jsonwebtoken": "^8.1.0",
-    "request": "^2.83.0"
-  },
-  "devDependencies": {
-    "@types/node": "^8.5.1",
-    "typescript": "^2.8.1"
-  }
+    "name": "userly-sdk",
+    "version": "2.1.0",
+    "description": "userly service nodejs sdk",
+    "main": "lib/index.js",
+    "types": "./lib/index.d.ts",
+    "scripts": {
+        "tsc": "tsc"
+    },
+    "author": "farcek <farcek@gmail.com>",
+    "license": "ISC",
+    "dependencies": {
+        "debug": "^3.1.0",
+        "jsonwebtoken": "^8.1.0",
+        "request": "^2.83.0"
+    },
+    "devDependencies": {
+        "@types/node": "^8.5.1",
+        "typescript": "^2.8.1"
+    }
 }
