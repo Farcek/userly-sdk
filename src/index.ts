@@ -28,7 +28,16 @@ import * as IAcl from './acl';
 
 export interface IOption extends ITokenOptions {
 
-    baseUrl: string
+    /**
+     * server request timeout(secund)
+     * default : 1
+     */
+    requestTimeout?: number
+    /**
+     * userly api service base url
+     * default : http://api.userly.mn
+     */
+    baseUrl?: string
 
 }
 export class UserlySdk {
@@ -37,28 +46,38 @@ export class UserlySdk {
 
     constructor(private option: IOption) {
         this.token = new ClientToken(option);
+        this.aclManager = new IAcl.AclManager(this.optionBaseUrl, this.token, this.optionRequestTimeout);
+    }
 
-        this.aclManager = new IAcl.AclManager(option.baseUrl, this.token);
+    get optionBaseUrl() {
+        return this.option.baseUrl || 'http://api.userly.mn'
+    }
+
+    get optionRequestTimeout() {
+        return this.option.requestTimeout || 1
     }
 
     login(param: ILogin.ILoginParams) {
         return ILogin.login({
-            baseUrl: this.option.baseUrl,
-            token: this.currentToken
+            baseUrl: this.optionBaseUrl,
+            token: this.currentToken,
+            requestTimeout: this.optionRequestTimeout
         }, param);
     }
 
     loginByTokencode(tokencode: string) {
         return ILogin.loginByTokencode({
-            baseUrl: this.option.baseUrl,
-            token: this.currentToken
+            baseUrl: this.optionBaseUrl,
+            token: this.currentToken,
+            requestTimeout: this.optionRequestTimeout
         }, tokencode);
     }
 
     register(params: IRegister.IRegisterParams) {
         return IRegister.register({
-            baseUrl: this.option.baseUrl,
-            token: this.currentToken
+            baseUrl: this.optionBaseUrl,
+            token: this.currentToken,
+            requestTimeout: this.optionRequestTimeout
         }, params)
     }
 
@@ -66,18 +85,26 @@ export class UserlySdk {
         return this.token.currentToken;
     }
 
+    getACLManager() {
+        return this.aclManager;
+    }
+
     getACL() {
         return IAcl.getACL({
-            baseUrl: this.option.baseUrl,
-            token: this.currentToken
+            baseUrl: this.optionBaseUrl,
+            token: this.currentToken,
+            requestTimeout: this.optionRequestTimeout
         })
     }
     setACL(table: IAcl.IAccessTable) {
         return IAcl.setACL({
-            baseUrl: this.option.baseUrl,
-            token: this.currentToken
+            baseUrl: this.optionBaseUrl,
+            token: this.currentToken,
+            requestTimeout: this.optionRequestTimeout
         }, table)
     }
+
+
 
     checkACL(roles: string[], resource: string) {
         return this.aclManager.guard(roles, resource);

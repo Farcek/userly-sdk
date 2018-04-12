@@ -1,6 +1,7 @@
 export interface IRegisterOption {
     token: string;
     baseUrl: string;
+    requestTimeout: number;
 }
 export interface IRegisterParams {
     name: string;

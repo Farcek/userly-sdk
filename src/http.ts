@@ -1,12 +1,24 @@
 const request = require('request');
-export async function get<T>(uri: string, header: any) {
+
+export interface IOptions {
+    /**
+     * request timeout seconts
+     */
+    timeout: number
+
+    /**
+     * request headers
+     */
+    header: any
+}
+export async function get<T>(uri: string, options: IOptions) {
     return new Promise<T>((resolve, reject) => {
         request({
             uri,
             method: 'GET',
-            headers: header || {},
+            headers: options.header || {},
             json: true,
-            timeout: 10000
+            timeout: options.timeout * 1000
         }, (err: any, response: any, body: any) => {
             if (err) {
                 return reject(err);
@@ -19,15 +31,16 @@ export async function get<T>(uri: string, header: any) {
     });
 }
 
-export async function post<T>(uri: string, header: any, params: any) {
+export async function post<T>(uri: string, options: IOptions, params: any) {
     return new Promise<T>((resolve, reject) => {
         request({
             uri,
             method: 'POST',
-            headers: header || {},
+            headers: options.header || {},
             json: true,
-            body: params,
-            timeout: 10000
+            timeout: options.timeout * 1000,
+            body: params
+
         }, (err: any, response: any, body: any) => {
             if (err) {
                 return reject(err);
@@ -40,15 +53,16 @@ export async function post<T>(uri: string, header: any, params: any) {
     });
 }
 
-export async function put<T>(uri: string, header: any, params: any) {
+export async function put<T>(uri: string, options: IOptions, params: any) {
     return new Promise<T>((resolve, reject) => {
         request({
             uri,
             method: 'PUT',
-            headers: header || {},
+            headers: options.header || {},
             json: true,
+            timeout: options.timeout * 1000,
             body: params,
-            timeout: 10000
+
         }, (err: any, response: any, body: any) => {
             if (err) {
                 return reject(err);

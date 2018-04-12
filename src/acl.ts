@@ -3,6 +3,7 @@ import * as token from './token';
 export interface ILoginOption {
     token: string
     baseUrl: string
+    requestTimeout: number
 }
 export interface IAccessRole {
     parents: string[]
@@ -23,7 +24,7 @@ export async function getACL(option: ILoginOption) {
         Authorization: 'Bearer ' + option.token
     };
 
-    let result = await http.get<{ accessTable: IAccessTable }>(`${option.baseUrl}/acl-roles`, header);
+    let result = await http.get<{ accessTable: IAccessTable }>(`${option.baseUrl}/acl-roles`, { header, timeout: option.requestTimeout });
     return result.accessTable;
 }
 
@@ -32,14 +33,14 @@ export function setACL(option: ILoginOption, accessTable: IAccessTable) {
         Authorization: 'Bearer ' + option.token
     };
 
-    return http.post<IAccessTable>(`${option.baseUrl}/acl-roles`, header, { accessTable });
+    return http.post<IAccessTable>(`${option.baseUrl}/acl-roles`, { header, timeout: option.requestTimeout }, { accessTable });
 }
 
 export class AclManager {
 
+    private tableAt?: Date;
 
-
-    constructor(private baseUrl: string, private token: token.ClientToken) {
+    constructor(private baseUrl: string, private token: token.ClientToken, private requestTimeout: number) {
 
     }
 
@@ -50,8 +51,13 @@ export class AclManager {
             return this._table;
         }
 
-        this._table = await getACL({ baseUrl: this.baseUrl, token: this.token.currentToken });
+        return await this.reloadTable();
+    }
 
+    async reloadTable() {
+
+        this.tableAt = new Date();
+        this._table = await getACL({ baseUrl: this.baseUrl, requestTimeout: this.requestTimeout, token: this.token.currentToken });
         return this._table;
     }
 
@@ -84,7 +90,6 @@ export class AclManager {
         if (Array.isArray(roles)) {
             let table = await this.getTable()
             for (let par of roles) {
-                console.log('par', par)
                 if (this.test(table, par, resource)) {
                     return true;
                 }

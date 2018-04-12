@@ -2,6 +2,7 @@ import * as token from './token';
 export interface ILoginOption {
     token: string;
     baseUrl: string;
+    requestTimeout: number;
 }
 export interface IAccessRole {
     parents: string[];
@@ -20,9 +21,12 @@ export declare function setACL(option: ILoginOption, accessTable: IAccessTable):
 export declare class AclManager {
     private baseUrl;
     private token;
-    constructor(baseUrl: string, token: token.ClientToken);
+    private requestTimeout;
+    private tableAt?;
+    constructor(baseUrl: string, token: token.ClientToken, requestTimeout: number);
     private _table?;
     private getTable();
+    reloadTable(): Promise<IAccessTable>;
     private test(table, role, resource);
     guard(roles: string[], resource: string): Promise<boolean>;
 }

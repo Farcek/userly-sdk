@@ -2,6 +2,8 @@ import * as http from './http';
 export interface IRegisterOption {
     token: string
     baseUrl: string
+
+    requestTimeout: number
 }
 
 export interface IRegisterParams {
@@ -20,5 +22,5 @@ export function register(option: IRegisterOption, params: IRegisterParams) {
         Authorization: 'Bearer ' + option.token
     };
 
-    return http.post<IRegisterResult>(`${option.baseUrl}/register`, header, params);
+    return http.post<IRegisterResult>(`${option.baseUrl}/register`, { header, timeout: option.requestTimeout }, params);
 }

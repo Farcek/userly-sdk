@@ -1,6 +1,7 @@
 export interface ILoginOption {
     token: string;
     baseUrl: string;
+    requestTimeout: number;
 }
 export interface ILoginParams {
     useridentity: string;

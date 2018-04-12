@@ -5,13 +5,28 @@ const ms = require('ms');
 
 export interface IOption {
 
+    /**
+     * userly appid
+     */
     appid: number
 
+    /**
+     * client private key
+     * ssh2 RS256 private key
+     */
     privateKey: string
 
+    /**
+     * token expires at
+     */
     expiresIn?: string
 
-    timeout?: string
+    /**
+     * token cache timepout
+     * ex : 1m, 30s
+     * default : 1m
+     */
+    tokenCacheTimeout?: string
 
 }
 export class ClientToken {
@@ -19,7 +34,7 @@ export class ClientToken {
     constructor(private option: IOption) { }
 
 
-    private _token: string
+    private _token: string = '';
     get currentToken() {
         if (this._token) {
             return this._token;
@@ -33,7 +48,7 @@ export class ClientToken {
 
         setTimeout(() => {
             delete this._token;
-        }, ms(this.option.timeout || '1m'));
+        }, ms(this.option.tokenCacheTimeout || '1m'));
 
         return this._token;
     }

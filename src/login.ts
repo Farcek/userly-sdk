@@ -2,6 +2,8 @@ import * as http from './http';
 export interface ILoginOption {
     token: string
     baseUrl: string
+
+    requestTimeout: number
 }
 
 export interface ILoginParams {
@@ -22,12 +24,12 @@ export function login(option: ILoginOption, params: ILoginParams) {
         Authorization: 'Bearer ' + option.token
     };
 
-    return http.post<ILoginResult>(`${option.baseUrl}/login`, header, params);
+    return http.post<ILoginResult>(`${option.baseUrl}/login`, { header, timeout: option.requestTimeout }, params);
 }
 export function loginByTokencode(option: ILoginOption, tokencode: string) {
     let header = {
         Authorization: 'Bearer ' + option.token
     };
 
-    return http.post<ILoginResult>(`${option.baseUrl}/login-tokencode`, header, { tokencode });
+    return http.post<ILoginResult>(`${option.baseUrl}/login-tokencode`, { header, timeout: option.requestTimeout }, { tokencode });
 }
