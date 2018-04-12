@@ -39,7 +39,7 @@ export function setACL(option: ILoginOption, accessTable: IAccessTable) {
 
 export class AclManager {
 
-    private tableAt?: Date;
+    tableAt?: Date;
 
     constructor(private baseUrl: string, private token: token.ClientToken, private requestTimeout: number) {
         debug("create AclManager");

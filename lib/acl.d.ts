@@ -22,7 +22,7 @@ export declare class AclManager {
     private baseUrl;
     private token;
     private requestTimeout;
-    private tableAt?;
+    tableAt?: Date;
     constructor(baseUrl: string, token: token.ClientToken, requestTimeout: number);
     private _table?;
     private getTable();
